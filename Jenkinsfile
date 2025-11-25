@@ -12,14 +12,13 @@ pipeline {
     stage('Checkout Code') {
       steps {
         git branch: 'main',
-            url: 'https://github.com/Yashmittal01/jenkins-1.git', // add your GitHub PAT/credentials ID here if repo is private
+            url: 'https://github.com/Yashmittal01/jenkins-1.git'
       }
     }
 
     stage('Terraform Init') {
       steps {
-        // Use bat on Windows, sh on Linux
-        bat 'terraform init'
+        bat 'terraform init'   // use bat on Windows
       }
     }
 
