@@ -11,24 +11,26 @@ pipeline {
   stages {
     stage('Checkout Code') {
       steps {
-        git branch: 'main', url: 'https://github.com/Yashmittal01/jenkins-1.git'
+        git branch: 'main',
+            url: 'https://github.com/Yashmittal01/jenkins-1.git', // add your GitHub PAT/credentials ID here if repo is private
       }
     }
 
     stage('Terraform Init') {
       steps {
-        sh 'terraform init'
+        // Use bat on Windows, sh on Linux
+        bat 'terraform init'
       }
     }
 
     stage('Terraform Plan') {
       steps {
-        sh '''
-          terraform plan \
-            -var "subscription_id=$ARM_SUBSCRIPTION_ID" \
-            -var "client_id=$ARM_CLIENT_ID" \
-            -var "client_secret=$ARM_CLIENT_SECRET" \
-            -var "tenant_id=$ARM_TENANT_ID"
+        bat '''
+          terraform plan ^
+            -var "subscription_id=%ARM_SUBSCRIPTION_ID%" ^
+            -var "client_id=%ARM_CLIENT_ID%" ^
+            -var "client_secret=%ARM_CLIENT_SECRET%" ^
+            -var "tenant_id=%ARM_TENANT_ID%"
         '''
       }
     }
@@ -41,12 +43,12 @@ pipeline {
 
     stage('Terraform Apply') {
       steps {
-        sh '''
-          terraform apply -auto-approve \
-            -var "subscription_id=$ARM_SUBSCRIPTION_ID" \
-            -var "client_id=$ARM_CLIENT_ID" \
-            -var "client_secret=$ARM_CLIENT_SECRET" \
-            -var "tenant_id=$ARM_TENANT_ID"
+        bat '''
+          terraform apply -auto-approve ^
+            -var "subscription_id=%ARM_SUBSCRIPTION_ID%" ^
+            -var "client_id=%ARM_CLIENT_ID%" ^
+            -var "client_secret=%ARM_CLIENT_SECRET%" ^
+            -var "tenant_id=%ARM_TENANT_ID%"
         '''
       }
     }
